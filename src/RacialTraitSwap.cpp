@@ -816,26 +816,27 @@ public:
                 {
                     bool restrictByClass = sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true);
                     uint8 playerClass = player->getClass();
+                    uint8 playerRace = player->getRace();
 
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_BLOODELF))
+                    if (playerRace != RACE_BLOODELF && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_BLOODELF)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageBE.str(), GOSSIP_SENDER_MAIN, 1);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_DRAENEI))
+                    if (playerRace != RACE_DRAENEI && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_DRAENEI)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageDR.str(), GOSSIP_SENDER_MAIN, 2);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_DWARF))
+                    if (playerRace != RACE_DWARF && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_DWARF)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageDW.str(), GOSSIP_SENDER_MAIN, 3);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_GNOME))
+                    if (playerRace != RACE_GNOME && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_GNOME)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageGN.str(), GOSSIP_SENDER_MAIN, 4);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_HUMAN))
+                    if (playerRace != RACE_HUMAN && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_HUMAN)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageHU.str(), GOSSIP_SENDER_MAIN, 5);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_NIGHTELF))
+                    if (playerRace != RACE_NIGHTELF && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_NIGHTELF)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageNE.str(), GOSSIP_SENDER_MAIN, 6);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_ORC))
+                    if (playerRace != RACE_ORC && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_ORC)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageOR.str(), GOSSIP_SENDER_MAIN, 7);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_TAUREN))
+                    if (playerRace != RACE_TAUREN && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_TAUREN)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageTA.str(), GOSSIP_SENDER_MAIN, 8);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_TROLL))
+                    if (playerRace != RACE_TROLL && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_TROLL)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageTR.str(), GOSSIP_SENDER_MAIN, 9);
-                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_UNDEAD_PLAYER))
+                    if (playerRace != RACE_UNDEAD_PLAYER && (!restrictByClass || IsRaceValidForClass(playerClass, RACE_UNDEAD_PLAYER)))
                         AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageUN.str(), GOSSIP_SENDER_MAIN, 10);
                     AddGossipItemFor(player, GOSSIP_ICON_TALK, localizedExit, GOSSIP_SENDER_MAIN, 1111);
                     SendGossipMenuFor(player, 98888, creature->GetGUID());
@@ -855,6 +856,8 @@ public:
 
             case 112: // Blood Elf
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_BLOODELF)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_BLOODELF))
                     return true;
@@ -900,6 +903,8 @@ public:
 
             case 212: // Draenei
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_DRAENEI)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_DRAENEI))
                     return true;
@@ -975,6 +980,8 @@ public:
 
             case 31: // Dwarves
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_DWARF)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_DWARF))
                     return true;
@@ -999,6 +1006,8 @@ public:
 
             case 41: // Gnome
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_GNOME)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_GNOME))
                     return true;
@@ -1022,6 +1031,8 @@ public:
 
             case 51: // Human
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_HUMAN)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_HUMAN))
                     return true;
@@ -1047,6 +1058,8 @@ public:
 
             case 61: // Night Elf
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_NIGHTELF)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_NIGHTELF))
                     return true;
@@ -1071,6 +1084,8 @@ public:
 
             case 71: // Orc
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_ORC)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_ORC))
                     return true;
@@ -1132,6 +1147,8 @@ public:
 
             case 81: // Tauren
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_TAUREN)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_TAUREN))
                     return true;
@@ -1155,6 +1172,8 @@ public:
 
             case 91: // Troll
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_TROLL)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_TROLL))
                     return true;
@@ -1180,6 +1199,8 @@ public:
 
             case 101: // Undead
                 CloseGossipMenuFor(player);
+                if (player->getRace() == RACE_UNDEAD_PLAYER)
+                    return true;
                 if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
                     !IsRaceValidForClass(player->getClass(), RACE_UNDEAD_PLAYER))
                     return true;
