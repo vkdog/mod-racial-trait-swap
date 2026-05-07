@@ -1,7 +1,8 @@
--- NPC ID 98888 Swirl
-SET @NAME := 'Swirl';
-SET @SUBNAME := 'AzerothCore Racial Traits Swapper';
-SET @DISPLAY_ID := 19646;
+-- NPC ID 98888 Swirl based character
+SET @NAME := 'Medivh';
+SET @SUBNAME := 'Manipulator of Traits';
+-- Template model of NPC ID 17651 'Image of Medivh'
+SET @DISPLAY_ID := 18720;
 
 DELETE FROM `creature_template` WHERE `entry`=98888;
 INSERT INTO `creature_template` (`entry`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `faction`, `npcflag`, `speed_walk`, `speed_run`, `rank`, `unit_class`, `unit_flags`, `type`, `type_flags`, `RegenHealth`, `flags_extra`, `ScriptName`) VALUES(98888, @NAME, @SUBNAME, 'Speak', 0, 80, 80, 35, 1, 1, 1.14286, 0, 1, 0, 7, 138936390, 1, 0, 'npc_race_trait_swap');
