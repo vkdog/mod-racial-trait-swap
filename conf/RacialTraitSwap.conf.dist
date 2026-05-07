@@ -23,4 +23,13 @@ Azerothcore.Racial.Trait.Swap.Announce.enable = 1
 Racial.Traits.Swap.Gold = 10
 
 #
+#    Racial.Traits.Swap.Class.Restriction
+#         Description: Restricts available race options to races that share the player's class.
+#                      Example: A Paladin can only choose Human, Dwarf, Draenei, or Blood Elf traits.
+#         Default:    0 - (Disabled - all races always available)
+#                     1 - (Enabled)
+
+Racial.Traits.Swap.Class.Restriction = 1
+
+#
 ###################################################################################################

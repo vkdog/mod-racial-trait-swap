@@ -389,6 +389,50 @@ void RemoveAllRacials(Player* player)
     player->removeSpell(822, SPEC_MASK_ALL, false);   // unlearn Magic Resistance
 }
 
+bool IsRaceValidForClass(uint8 playerClass, uint8 raceId)
+{
+    switch (playerClass)
+    {
+        case CLASS_DEATH_KNIGHT:
+            return true;
+        case CLASS_WARRIOR:
+            return raceId != RACE_BLOODELF;
+        case CLASS_PALADIN:
+            return raceId == RACE_HUMAN || raceId == RACE_DWARF ||
+                   raceId == RACE_DRAENEI || raceId == RACE_BLOODELF;
+        case CLASS_HUNTER:
+            return raceId == RACE_DWARF || raceId == RACE_NIGHTELF ||
+                   raceId == RACE_DRAENEI || raceId == RACE_ORC ||
+                   raceId == RACE_TAUREN || raceId == RACE_TROLL ||
+                   raceId == RACE_BLOODELF;
+        case CLASS_ROGUE:
+            return raceId == RACE_HUMAN || raceId == RACE_DWARF ||
+                   raceId == RACE_NIGHTELF || raceId == RACE_GNOME ||
+                   raceId == RACE_ORC || raceId == RACE_UNDEAD_PLAYER ||
+                   raceId == RACE_TROLL || raceId == RACE_BLOODELF;
+        case CLASS_PRIEST:
+            return raceId == RACE_HUMAN || raceId == RACE_DWARF ||
+                   raceId == RACE_NIGHTELF || raceId == RACE_DRAENEI ||
+                   raceId == RACE_UNDEAD_PLAYER || raceId == RACE_TROLL ||
+                   raceId == RACE_BLOODELF;
+        case CLASS_SHAMAN:
+            return raceId == RACE_DRAENEI || raceId == RACE_ORC ||
+                   raceId == RACE_TAUREN || raceId == RACE_TROLL;
+        case CLASS_MAGE:
+            return raceId == RACE_HUMAN || raceId == RACE_GNOME ||
+                   raceId == RACE_DRAENEI || raceId == RACE_UNDEAD_PLAYER ||
+                   raceId == RACE_TROLL || raceId == RACE_BLOODELF;
+        case CLASS_WARLOCK:
+            return raceId == RACE_HUMAN || raceId == RACE_GNOME ||
+                   raceId == RACE_ORC || raceId == RACE_UNDEAD_PLAYER ||
+                   raceId == RACE_BLOODELF;
+        case CLASS_DRUID:
+            return raceId == RACE_NIGHTELF || raceId == RACE_TAUREN;
+        default:
+            return true;
+    }
+}
+
 class Azerothcore_Race_Trait_announce : public PlayerScript
 {
 public:
@@ -770,16 +814,29 @@ public:
             case 11:
                 if (player)
                 {
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageBE.str(), GOSSIP_SENDER_MAIN, 1); // Blood Elf Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageDR.str(), GOSSIP_SENDER_MAIN, 2); // Draenei Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageDW.str(), GOSSIP_SENDER_MAIN, 3); // Dwarves Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageGN.str(), GOSSIP_SENDER_MAIN, 4); // Gnome Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageHU.str(), GOSSIP_SENDER_MAIN, 5); // Human Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageNE.str(), GOSSIP_SENDER_MAIN, 6); // Night Elf Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageOR.str(), GOSSIP_SENDER_MAIN, 7); // Orc Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageTA.str(), GOSSIP_SENDER_MAIN, 8); // Tauren Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageTR.str(), GOSSIP_SENDER_MAIN, 9); // Troll Selection
-                    AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageUN.str(), GOSSIP_SENDER_MAIN, 10); // Undead
+                    bool restrictByClass = sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true);
+                    uint8 playerClass = player->getClass();
+
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_BLOODELF))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageBE.str(), GOSSIP_SENDER_MAIN, 1);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_DRAENEI))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageDR.str(), GOSSIP_SENDER_MAIN, 2);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_DWARF))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageDW.str(), GOSSIP_SENDER_MAIN, 3);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_GNOME))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageGN.str(), GOSSIP_SENDER_MAIN, 4);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_HUMAN))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageHU.str(), GOSSIP_SENDER_MAIN, 5);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_NIGHTELF))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageNE.str(), GOSSIP_SENDER_MAIN, 6);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_ORC))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageOR.str(), GOSSIP_SENDER_MAIN, 7);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_TAUREN))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageTA.str(), GOSSIP_SENDER_MAIN, 8);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_TROLL))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageTR.str(), GOSSIP_SENDER_MAIN, 9);
+                    if (!restrictByClass || IsRaceValidForClass(playerClass, RACE_UNDEAD_PLAYER))
+                        AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, messageUN.str(), GOSSIP_SENDER_MAIN, 10);
                     AddGossipItemFor(player, GOSSIP_ICON_TALK, localizedExit, GOSSIP_SENDER_MAIN, 1111);
                     SendGossipMenuFor(player, 98888, creature->GetGUID());
                 }
@@ -798,6 +855,9 @@ public:
 
             case 112: // Blood Elf
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_BLOODELF))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -840,6 +900,9 @@ public:
 
             case 212: // Draenei
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_DRAENEI))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -912,6 +975,9 @@ public:
 
             case 31: // Dwarves
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_DWARF))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -933,6 +999,9 @@ public:
 
             case 41: // Gnome
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_GNOME))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -953,6 +1022,9 @@ public:
 
             case 51: // Human
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_HUMAN))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -975,6 +1047,9 @@ public:
 
             case 61: // Night Elf
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_NIGHTELF))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -996,6 +1071,9 @@ public:
 
             case 71: // Orc
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_ORC))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -1054,6 +1132,9 @@ public:
 
             case 81: // Tauren
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_TAUREN))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -1074,6 +1155,9 @@ public:
 
             case 91: // Troll
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_TROLL))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
@@ -1096,6 +1180,9 @@ public:
 
             case 101: // Undead
                 CloseGossipMenuFor(player);
+                if (sConfigMgr->GetOption<bool>("Racial.Traits.Swap.Class.Restriction", true) &&
+                    !IsRaceValidForClass(player->getClass(), RACE_UNDEAD_PLAYER))
+                    return true;
                 if (!player->HasEnoughMoney(RTS1 * GOLD)) // gold check
                     return true;
                 player->ModifyMoney(-RTS1 * GOLD); // Deducting the money if check passes
